@@ -1,0 +1,21 @@
+{
+  "name": "travel-bot-engine",
+  "version": "1.0.0",
+  "description": "> **Đặt vé máy bay bằng tiếng Việt tự nhiên — không cần điền form, không cần mở nhiều tab.**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tranhieutt/QuickFly.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tranhieutt/QuickFly/issues"
+  },
+  "homepage": "https://github.com/tranhieutt/QuickFly#readme"
+}

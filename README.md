@@ -2,7 +2,7 @@
 
 > **Đặt vé máy bay bằng tiếng Việt tự nhiên — không cần điền form, không cần mở nhiều tab.**
 
-QuickFly là một web chat bot giúp người dùng tìm kiếm chuyến bay thông qua hội thoại tự nhiên bằng tiếng Việt. Chỉ cần nhập một câu mô tả chuyến đi, bot sẽ hiển thị ngay top 3 chuyến bay phù hợp và redirect sang website hãng bay để thanh toán.
+QuickFly là một web chatbot giúp người dùng tìm kiếm chuyến bay thông qua hội thoại tự nhiên bằng tiếng Việt. Chỉ cần nhập một câu mô tả chuyến đi, bot sẽ hiển thị ngay top 3 chuyến bay phù hợp và redirect sang website hãng bay để thanh toán.
 
 ---
 
@@ -45,9 +45,9 @@ QuickFly là một web chat bot giúp người dùng tìm kiếm chuyến bay th
 
 | Layer | Công nghệ |
 |-------|-----------|
-| Frontend | React + Tailwind CSS |
+| Frontend | React + Vite + CSS |
 | Backend | Node.js + Express |
-| AI / NLP | Gemini 2.5 Flash |
+| AI / NLP | Google Gemini 2.5 Flash |
 | Flight API | Amadeus for Developers |
 | Deploy Frontend | Vercel |
 | Deploy Backend | Railway |
@@ -62,6 +62,10 @@ Người dùng nhập tiếng Việt
 Gemini 2.5 Flash parse câu lệnh
         ↓
 Output JSON: { origin, destination, date, adults, filters }
+        ↓
+Input Validator (kiểm tra dữ liệu hợp lệ)
+        ↓
+IATA Code Mapper (chuyển tên thành mã sân bay)
         ↓
 Amadeus Flight Offers Search API
         ↓
@@ -78,33 +82,39 @@ User chọn → Redirect sang trang hãng bay
 
 ```
 QuickFly/
-├── design/
-│   └── docs/
-│       ├── product-concept.md     # Product concept & requirements
-│       └── systems-index.md       # 11 hệ thống + dependency map
-├── session-state.md               # Trạng thái dự án hiện tại
+├── backend/
+│   ├── src/
+│   │   ├── config/          # Cấu hình app (Gemini, Amadeus)
+│   │   ├── data/            # Dữ liệu tĩnh (IATA codes, airline map)
+│   │   ├── middleware/      # Error handler
+│   │   ├── modules/
+│   │   │   ├── filter/      # Bộ lọc bay thẳng, giờ bay
+│   │   │   ├── flight/      # Tìm kiếm chuyến bay (Amadeus API)
+│   │   │   ├── iata/        # Mapper tên thành phố → mã sân bay
+│   │   │   ├── nlp/         # NLP Parser (Gemini)
+│   │   │   ├── redirect/    # Tạo URL redirect hãng bay
+│   │   │   ├── state/       # Quản lý hội thoại (Conversation State)
+│   │   │   └── validator/   # Kiểm tra input hợp lệ
+│   │   ├── prompts/         # System prompt cho Gemini
+│   │   ├── routes/          # API routes
+│   │   └── server.js        # Entry point
+│   ├── tests/               # Unit tests (Jest)
+│   ├── .env.example
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── FlightCard.jsx       # Card hiển thị chuyến bay
+│   │   │   └── FlightResultList.jsx # Danh sách kết quả
+│   │   ├── App.jsx          # Main chat interface
+│   │   ├── App.css          # Styles
+│   │   └── main.jsx         # Entry point
+│   ├── public/
+│   ├── index.html
+│   └── package.json
+├── design/                  # Tài liệu thiết kế hệ thống
 └── README.md
 ```
-
-> **Lưu ý**: Dự án đang ở giai đoạn thiết kế hệ thống. Code sẽ được thêm trong các sprint tiếp theo.
-
----
-
-## ⚙️ 11 Hệ thống cần xây dựng
-
-| # | Hệ thống | Layer | Trạng thái |
-|---|----------|-------|-----------|
-| 1 | Backend API Gateway | Foundation | 🔲 Chưa bắt đầu |
-| 2 | IATA Code Mapper | Foundation | 🔲 Chưa bắt đầu |
-| 3 | Error Handler | Foundation | 🔲 Chưa bắt đầu |
-| 4 | NLP Parser | Core | 🔲 Chưa bắt đầu |
-| 5 | Input Validator | Core | 🔲 Chưa bắt đầu |
-| 6 | Flight Search | Core | 🔲 Chưa bắt đầu |
-| 7 | Filter Engine | Feature | 🔲 Chưa bắt đầu |
-| 8 | Conversation State Manager | Feature | 🔲 Chưa bắt đầu |
-| 9 | Redirect Handler | Feature | 🔲 Chưa bắt đầu |
-| 10 | Result Display | Presentation | 🔲 Chưa bắt đầu |
-| 11 | Chat UI | Presentation | 🔲 Chưa bắt đầu |
 
 ---
 
@@ -137,11 +147,26 @@ npm run dev
 
 ### Biến môi trường
 
+**Backend** (`backend/.env`):
 ```env
 GEMINI_API_KEY=your_gemini_api_key
 AMADEUS_CLIENT_ID=your_amadeus_client_id
 AMADEUS_CLIENT_SECRET=your_amadeus_client_secret
 AMADEUS_ENV=test              # test | production
+```
+
+**Frontend** (`frontend/.env`):
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+---
+
+## 🧪 Chạy Tests
+
+```bash
+cd backend
+npm test
 ```
 
 ---
@@ -180,9 +205,10 @@ AMADEUS_ENV=test              # test | production
 
 - [x] Product Concept Document
 - [x] Systems Index (11 hệ thống)
-- [ ] Thiết kế chi tiết từng hệ thống
-- [ ] Sprint Plan
-- [ ] Prototype
+- [x] Backend API hoàn chỉnh (NLP, Flight Search, Filter, Redirect)
+- [x] Frontend Chat UI (React + Vite)
+- [ ] Kết nối Amadeus API thực (Production)
+- [ ] Deploy lên Vercel + Railway
 - [ ] MVP Launch
 
 ---

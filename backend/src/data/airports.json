@@ -1,0 +1,12 @@
+{
+  "SGN": ["sgn", "hcm", "ho chi minh", "sai gon", "tp hcm", "tphcm", "saigon", "thanh pho ho chi minh", "sg"],
+  "HAN": ["han", "ha noi", "hanoi", "hn"],
+  "DAD": ["dad", "da nang", "danang", "dn"],
+  "CXR": ["cxr", "nha trang", "nhatrang", "cam ranh"],
+  "HPH": ["hph", "hai phong", "haiphong", "hp"],
+  "HUI": ["hui", "hue", "thue thien hue"],
+  "VCA": ["vca", "can tho", "cantho", "ct"],
+  "BMV": ["bmv", "buon ma thuot", "buon me thuot", "bmt"],
+  "DLI": ["dli", "da lat", "dalat", "lam dong"],
+  "PQC": ["pqc", "phu quoc", "phuquoc", "dao phu quoc"]
+}
