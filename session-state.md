@@ -26,15 +26,18 @@
 - [x] Implementation — tất cả module backend + frontend đã viết code
 - [x] Tests — 4 test files, 40 tests passing
 - [x] Migration: Amadeus → Duffel API (flight-search.js rewrite, config update, specs update)
+- [x] Full source code commit — backend + frontend + README (2026-03-28)
+- [x] Repository pushed lên origin/main — working tree clean
 - [ ] End-to-end test với real API keys (GEMINI_API_KEY + DUFFEL_TOKEN)
 
 ## Bước tiếp theo
 
-**Implementation HOÀN CHỈNH** — cần real API keys để test end-to-end.
+**Codebase hoàn chỉnh, repo đã push.** Bước duy nhất còn lại là test với real API keys.
 
-1. Tạo `.env` từ `.env.example`, điền `GEMINI_API_KEY` và `DUFFEL_TOKEN` (duffel_test_...)
-2. Chạy `npm run dev` ở cả backend và frontend
-3. Test manual: nhập "HCM đi Hà Nội ngày 10/4" → verify top 3 kết quả
+1. Tạo `.env` từ `.env.example` ở thư mục `backend/`, điền `GEMINI_API_KEY` và `DUFFEL_TOKEN` (duffel_test_...)
+2. Chạy `npm run dev` trong `backend/` và `npm run dev` trong `frontend/`
+3. Test manual: nhập "HCM đi Hà Nội ngày 10/4" → verify top 3 kết quả hiển thị đúng
+4. (Optional) Deploy: Vercel cho frontend, Railway cho backend
 
 ## Quyết định đã chốt
 
